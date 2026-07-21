@@ -64,46 +64,51 @@ window.addEventListener('load', () => {
   }, 1900);
 });
 
-/* ── Custom Cursor ── */
+/* ── Custom Cursor Spotlight ── */
 const cursorGlow = document.getElementById('cursor-glow');
 const cursorDot  = document.getElementById('cursor-dot');
 
-let mouseX = 0, mouseY = 0;
-let glowX = 0, glowY = 0;
+if (cursorGlow || cursorDot) {
+  let mouseX = 0, mouseY = 0;
 
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
 
-  cursorDot.style.left = mouseX + 'px';
-  cursorDot.style.top  = mouseY + 'px';
-  cursorGlow.style.left = mouseX + 'px';
-  cursorGlow.style.top  = mouseY + 'px';
-});
+    if (cursorDot) {
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    }
+    if (cursorGlow) {
+      cursorGlow.style.left = mouseX + 'px';
+      cursorGlow.style.top  = mouseY + 'px';
+    }
+  }, { passive: true });
 
-// Cursor hover state
-const hoverTargets = 'a, button, [role="button"], input, textarea, .skill-item, .service-card, .project-card, .glass-card';
+  // Cursor hover state
+  const hoverTargets = 'a, button, [role="button"], input, textarea, .skill-item, .service-card, .project-card, .glass-card';
 
-document.addEventListener('mouseover', e => {
-  if (e.target.closest(hoverTargets)) {
-    cursorDot.classList.add('hover');
-  }
-});
-document.addEventListener('mouseout', e => {
-  if (e.target.closest(hoverTargets)) {
-    cursorDot.classList.remove('hover');
-  }
-});
+  document.addEventListener('mouseover', e => {
+    if (cursorDot && e.target.closest(hoverTargets)) {
+      cursorDot.classList.add('hover');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (cursorDot && e.target.closest(hoverTargets)) {
+      cursorDot.classList.remove('hover');
+    }
+  });
 
-// Hide cursor when leaving window
-document.addEventListener('mouseleave', () => {
-  cursorDot.style.opacity = '0';
-  cursorGlow.style.opacity = '0';
-});
-document.addEventListener('mouseenter', () => {
-  cursorDot.style.opacity = '1';
-  cursorGlow.style.opacity = '1';
-});
+  // Hide cursor when leaving window
+  document.addEventListener('mouseleave', () => {
+    if (cursorDot) cursorDot.style.opacity = '0';
+    if (cursorGlow) cursorGlow.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    if (cursorDot) cursorDot.style.opacity = '1';
+    if (cursorGlow) cursorGlow.style.opacity = '1';
+  });
+}
 
 /* ── Scroll Progress ── */
 const progressBar = document.getElementById('scroll-progress');

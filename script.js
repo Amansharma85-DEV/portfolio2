@@ -10,20 +10,26 @@ const DEFAULT_PROJECTS = [
   { id: 3, title: 'E-Commerce React App', demo: 'https://amansharma85-dev.github.io/ecommerce/#/', github: 'https://github.com/amansharma85-dev/ecommerce', badges: ['React', 'Node.js', 'Express'], image: 'assets/project3.png', description: 'React e-commerce shopping platform with product catalog filtering, cart state management, and seamless checkout.' },
   { id: 4, title: 'E-Commerce Website', demo: 'https://amansharma85-dev.github.io/e-commerce-website/', github: 'https://github.com/amansharma85-dev/e-commerce-website', badges: ['JavaScript', 'HTML5', 'CSS3'], image: 'assets/project4.png', description: 'Traditional shopping website with clean product catalog layouts, sliding banner, category filters, and intuitive cart UI.' },
   { id: 5, title: 'Swadeshi Kitchen', demo: 'https://amansharma85-dev.github.io/swadeshi-kitchen-live/', github: 'https://github.com/amansharma85-dev/swadeshi-kitchen-live', badges: ['React', 'CSS3', 'GitHub Pages'], image: 'assets/ss1.png', description: 'A premium recipe platform featuring traditional Indian recipes, interactive cooking guides, food categories, and responsive UI.' },
-  { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png', description: 'A premium gym landing page highlighting workouts, trainer profiles, plans, and fitness trackers with modern aesthetics.' }
+  { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png?v=2', description: 'A premium gym landing page highlighting workouts, trainer profiles, plans, and fitness trackers with modern aesthetics.' }
 ];
 
 function initProjectsDynamic() {
   const container = document.querySelector('.projects-grid');
   if (!container) return;
 
-  const projs = localStorage.getItem('admin_projects')
+  let projs = localStorage.getItem('admin_projects')
     ? JSON.parse(localStorage.getItem('admin_projects'))
     : DEFAULT_PROJECTS;
 
-  if (!localStorage.getItem('admin_projects')) {
-    localStorage.setItem('admin_projects', JSON.stringify(DEFAULT_PROJECTS));
-  }
+  // Auto-upgrade image path for Elite Fitness Club to bypass cached localStorage & HTTP cache
+  projs = projs.map(p => {
+    if (p.id === 6 || p.title === 'Elite Fitness Club') {
+      return { ...p, image: 'assets/ss2.png?v=2' };
+    }
+    return p;
+  });
+
+  localStorage.setItem('admin_projects', JSON.stringify(projs));
 
   container.innerHTML = projs.map((p, idx) => {
     const delay = (idx % 3) + 1;

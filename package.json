@@ -1,0 +1,13 @@
+{
+  "name": "portfolio-backend",
+  "version": "1.0.0",
+  "description": "Portfolio backend with tiered configurable rate limiting middleware",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node rateLimiter.test.js && node fileUploader.test.js && node validator.test.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

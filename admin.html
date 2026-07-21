@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Aman Sharma Portfolio</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── Admin Dashboard Layout ── */
+    :root {
+      --sidebar-width: 260px;
+    }
+
+    body {
+      background: #050505;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Auth Screen */
+    #admin-auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 5, 8, 0.95);
+      backdrop-filter: blur(30px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 2.5rem;
+      border-radius: 24px;
+      background: rgba(17, 17, 24, 0.85);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(124, 58, 237, 0.2);
+    }
+
+    .auth-logo {
+      font-family: var(--font-head);
+      font-size: 2rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #7C3AED, #A855F7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .auth-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    /* App Wrapper */
+    #admin-app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: var(--sidebar-width);
+      background: rgba(10, 10, 15, 0.9);
+      border-right: 1px solid rgba(124, 58, 237, 0.2);
+      padding: 2rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 100;
+    }
+
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+    }
+
+    .admin-brand-title {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .admin-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      flex: 1;
+    }
+
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .admin-nav-item:hover,
+    .admin-nav-item.active {
+      color: #FFFFFF;
+      background: rgba(124, 58, 237, 0.15);
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .admin-nav-item.active {
+      box-shadow: 0 0 15px rgba(124, 58, 237, 0.2);
+    }
+
+    /* Main Workspace */
+    .admin-main {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 2rem 2.5rem;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+    }
+
+    .admin-page-title {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      font-weight: 800;
+    }
+
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Dashboard Stats Grid */
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .admin-stat-card {
+      padding: 1.5rem;
+      border-radius: 20px;
+      background: rgba(17, 17, 24, 0.75);
+      border: 1px solid rgba(124, 58, 237, 0.25);
+    }
+
+    .admin-stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+
+    .admin-stat-icon {
+      width: 42px; height: 42px;
+      border-radius: 12px;
+      background: rgba(124, 58, 237, 0.15);
+      color: #A855F7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .admin-stat-val {
+      font-family: var(--font-head);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .admin-stat-lbl {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Table & Panels */
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-panel.active {
+      display: block;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .data-table th, .data-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.88rem;
+    }
+
+    .data-table th {
+      color: var(--accent-3);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-new { background: rgba(168, 85, 247, 0.2); color: #E879F9; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .status-replied { background: rgba(34, 197, 94, 0.2); color: #86EFAC; border: 1px solid rgba(34, 197, 94, 0.4); }
+
+    /* Modal Form */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-card {
+      width: 100%;
+      max-width: 550px;
+      background: rgba(17, 17, 24, 0.95);
+      border: 1px solid rgba(124, 58, 237, 0.4);
+      border-radius: 24px;
+      padding: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      .admin-sidebar { width: 80px; padding: 1.5rem 0.5rem; align-items: center; }
+      .admin-brand-title, .admin-nav-item span { display: none; }
+      .admin-main { margin-left: 80px; padding: 1.5rem; }
+      .admin-stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Auth Overlay -->
+  <div id="admin-auth-overlay">
+    <div class="auth-card">
+      <div class="auth-logo">AS &lt;/&gt; Admin</div>
+      <div class="auth-subtitle">Enter admin credentials to access portfolio control panel</div>
+
+      <form id="admin-login-form">
+        <div class="form-group" style="margin-bottom:1.2rem;">
+          <label class="form-label" for="admin-email">Admin Email</label>
+          <input type="email" id="admin-email" class="form-input" value="amansharma.aslink@gmail.com" required />
+        </div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+          <label class="form-label" for="admin-pass">Password</label>
+          <input type="password" id="admin-pass" class="form-input" placeholder="••••••••" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
+          Unlock Dashboard →
+        </button>
+        <div id="admin-auth-msg" style="display:none;margin-top:1rem;padding:0.75rem;border-radius:12px;font-size:0.85rem;text-align:center;"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Main Application -->
+  <div id="admin-app" style="display:none;">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <div class="nav-logo" style="font-size:1.4rem;">AS&lt;/&gt;</div>
+        <div class="admin-brand-title">Portfolio Control</div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-item active" data-panel="overview">
+          <span>📊</span> <span>Overview</span>
+        </div>
+        <div class="admin-nav-item" data-panel="messages">
+          <span>💬</span> <span>Messages</span> <span id="unread-count-badge" class="status-badge status-new" style="margin-left:auto;display:none;">0</span>
+        </div>
+        <div class="admin-nav-item" data-panel="projects">
+          <span>💻</span> <span>Projects</span>
+        </div>
+        <div class="admin-nav-item" data-panel="skills">
+          <span>⚡</span> <span>Skills Stack</span>
+        </div>
+        <div class="admin-nav-item" data-panel="security">
+          <span>🛡️</span> <span>Security & Rate Limits</span>
+        </div>
+      </nav>
+
+      <div style="margin-top:auto;">
+        <a href="index.html" class="admin-nav-item" style="margin-bottom:0.4rem;">
+          <span>🌐</span> <span>View Portfolio</span>
+        </a>
+        <div class="admin-nav-item" id="admin-logout-btn" style="color:#FCA5A5;">
+          <span>🚪</span> <span>Logout</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main">
+      
+      <!-- Top Header -->
+      <header class="admin-header">
+        <div>
+          <h1 class="admin-page-title" id="panel-title">Dashboard Overview</h1>
+          <div style="font-size:0.85rem;color:var(--text-muted);margin-top:4px;">Welcome back, Aman Sharma 👋</div>
+        </div>
+        <div class="admin-header-actions">
+          <button class="btn btn-secondary btn-sm" id="refresh-data-btn">🔄 Refresh Data</button>
+          <a href="index.html" class="btn btn-primary btn-sm">Live Site →</a>
+        </div>
+      </header>
+
+      <!-- Panel 1: Overview -->
+      <section id="panel-overview" class="admin-panel active">
+        <!-- Stats Row -->
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <div class="admin-stat-header">
+              <div class="admin-stat-icon">👁️</div>
+              <span style="font-size:0.75rem;color:#86EFAC;">+14% this week</span>
+            </div>
+            <div class="admin-stat-val" id="stat-total-views">1,420</div>
+            <div class="admin-stat-lbl">Total Portfolio Views</div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div class="admin-stat-header">
+              <div class="admin-stat-icon">✉️</div>
+              <span style="font-size:0.75rem;color:#E879F9;" id="stat-messages-new">2 New</span>
+            </div>
+            <div class="admin-stat-val" id="stat-total-messages">8</div>
+            <div class="admin-stat-lbl">Inquiries Received</div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div class="admin-stat-header">
+              <div class="admin-stat-icon">💻</div>
+              <span style="font-size:0.75rem;color:var(--accent-3);">6 Active</span>
+            </div>
+            <div class="admin-stat-val">6</div>
+            <div class="admin-stat-lbl">Featured Projects</div>
+          </div>
+
+          <div class="admin-stat-card">
+            <div class="admin-stat-header">
+              <div class="admin-stat-icon">🛡️</div>
+              <span style="font-size:0.75rem;color:#86EFAC;">100% Secure</span>
+            </div>
+            <div class="admin-stat-val">0</div>
+            <div class="admin-stat-lbl">Security Threat Alerts</div>
+          </div>
+        </div>
+
+        <!-- Recent Contact Messages Table -->
+        <div class="glass-card" style="padding:1.8rem;border-radius:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+            <h3 style="font-family:var(--font-head);font-size:1.2rem;">Recent Contact Inquiries</h3>
+            <button class="btn btn-secondary btn-sm" onclick="switchPanel('messages')">View All Messages →</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sender</th>
+                <th>Email / Contact</th>
+                <th>Message Snippet</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="overview-messages-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 2: Messages -->
+      <section id="panel-messages" class="admin-panel">
+        <div class="glass-card" style="padding:1.8rem;border-radius:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <h3 style="font-family:var(--font-head);font-size:1.3rem;">Contact Messages Inbox</h3>
+            <button class="btn btn-secondary btn-sm" id="clear-read-btn">Clear Replied Messages</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Message</th>
+                <th>Status</th>
+                <th>Quick Action</th>
+              </tr>
+            </thead>
+            <tbody id="all-messages-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 3: Projects -->
+      <section id="panel-projects" class="admin-panel">
+        <div class="glass-card" style="padding:1.8rem;border-radius:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <h3 style="font-family:var(--font-head);font-size:1.3rem;">Manage Featured Projects</h3>
+            <button class="btn btn-primary btn-sm" id="add-project-btn">+ Add New Project</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Project Name</th>
+                <th>Live Demo URL</th>
+                <th>GitHub Repo</th>
+                <th>Badges</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="projects-table-body">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 4: Skills -->
+      <section id="panel-skills" class="admin-panel">
+        <div class="glass-card" style="padding:1.8rem;border-radius:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+            <h3 style="font-family:var(--font-head);font-size:1.3rem;">Technical Tech Stack</h3>
+            <button class="btn btn-primary btn-sm" id="add-skill-btn">+ Add Skill</button>
+          </div>
+          <div id="skills-admin-container" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:1.5rem;">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 5: Security & Rate Limits -->
+      <section id="panel-security" class="admin-panel">
+        <div class="glass-card" style="padding:1.8rem;border-radius:24px;">
+          <h3 style="font-family:var(--font-head);font-size:1.3rem;margin-bottom:1rem;">Active Security Controls & Audit Logs</h3>
+          <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:1.5rem;margin-bottom:1.5rem;">
+            <div style="padding:1.2rem;background:rgba(255,255,255,0.03);border-radius:16px;border:1px solid rgba(124,58,237,0.2);">
+              <div style="font-weight:700;margin-bottom:0.5rem;color:var(--accent-3);">Rate Limiting Policy</div>
+              <div style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">
+                • Auth Routes: Strict limits + Per-IP & Account tracking with Exponential Backoff.<br/>
+                • Public Routes: 100 reqs / 15 mins.<br/>
+                • User Actions: 1000 reqs / 15 mins.
+              </div>
+            </div>
+            <div style="padding:1.2rem;background:rgba(255,255,255,0.03);border-radius:16px;border:1px solid rgba(124,58,237,0.2);">
+              <div style="font-weight:700;margin-bottom:0.5rem;color:var(--accent-3);">File Upload Safety Policy</div>
+              <div style="font-size:0.85rem;color:var(--text-muted);line-height:1.6;">
+                • Binary Magic Byte Validation Enabled.<br/>
+                • Storage outside web root (`uploads_isolated/`) with UUID names.<br/>
+                • Content-Disposition attachment & nosniff active.
+              </div>
+            </div>
+          </div>
+
+          <h4 style="font-family:var(--font-head);font-size:1rem;margin-bottom:0.8rem;">Recent Security Events</h4>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Event Type</th>
+                <th>Client IP</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Just now</td>
+                <td>Admin Login Verification</td>
+                <td>127.0.0.1 (Localhost)</td>
+                <td><span class="status-badge status-replied">Passed</span></td>
+              </tr>
+              <tr>
+                <td>5 mins ago</td>
+                <td>Rate Limiter Health Check</td>
+                <td>127.0.0.1</td>
+                <td><span class="status-badge status-replied">Active</span></td>
+              </tr>
+              <tr>
+                <td>12 mins ago</td>
+                <td>Input Schema Validation Test</td>
+                <td>127.0.0.1</td>
+                <td><span class="status-badge status-replied">Protected</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Add Project Modal -->
+  <div class="modal-overlay" id="project-modal">
+    <div class="modal-card">
+      <h3 style="font-family:var(--font-head);font-size:1.4rem;margin-bottom:1rem;" id="modal-project-title">Add New Project</h3>
+      <form id="project-modal-form">
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label">Project Title</label>
+          <input type="text" id="proj-title-input" class="form-input" required />
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label">Live Demo URL</label>
+          <input type="url" id="proj-demo-input" class="form-input" required />
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label">GitHub Repository URL</label>
+          <input type="url" id="proj-github-input" class="form-input" required />
+        </div>
+        <div class="form-group" style="margin-bottom:1rem;">
+          <label class="form-label">Image URL / Asset Path</label>
+          <input type="text" id="proj-image-input" class="form-input" placeholder="assets/project1.png" required />
+        </div>
+        <div class="form-group" style="margin-bottom:1.5rem;">
+          <label class="form-label">Tech Badges (comma separated)</label>
+          <input type="text" id="proj-badges-input" class="form-input" placeholder="React, Node.js, Tailwind" required />
+        </div>
+        <div style="display:flex;gap:1rem;justify-content:flex-end;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('project-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

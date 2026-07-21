@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amansharma85-dev.github.io/portfolio2/sitemap.xml

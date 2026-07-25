@@ -42,7 +42,8 @@ const DEFAULT_PROJECTS = [
   { id: 3, title: 'E-Commerce React App', demo: 'https://amansharma85-dev.github.io/ecommerce/#/', github: 'https://github.com/amansharma85-dev/ecommerce', badges: ['React', 'Node.js', 'Express'], image: 'assets/project3.png' },
   { id: 4, title: 'E-Commerce Website', demo: 'https://amansharma85-dev.github.io/e-commerce-website/', github: 'https://github.com/amansharma85-dev/e-commerce-website', badges: ['JavaScript', 'HTML5', 'CSS3'], image: 'assets/project4.png' },
   { id: 5, title: 'Swadeshi Kitchen', demo: 'https://amansharma85-dev.github.io/swadeshi-kitchen-live/', github: 'https://github.com/amansharma85-dev/swadeshi-kitchen-live', badges: ['React', 'CSS3', 'GitHub Pages'], image: 'assets/ss1.png' },
-  { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png' }
+  { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png' },
+  { id: 7, title: 'Savoria Kitchen', demo: 'https://amansharma85-dev.github.io/restaurant-website/', github: 'https://github.com/amansharma85-dev/restaurant-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/restaurant.png' }
 ];
 
 // Helper to get local data
@@ -57,7 +58,12 @@ function saveMessages(msgs) {
 
 function getProjects() {
   const stored = localStorage.getItem('admin_projects');
-  return stored ? JSON.parse(stored) : DEFAULT_PROJECTS;
+  let projs = stored ? JSON.parse(stored) : DEFAULT_PROJECTS;
+  if (!projs.some(p => p.id === 7 || (p.demo && p.demo.includes('restaurant-website')))) {
+    projs.push(DEFAULT_PROJECTS[6]);
+    saveProjects(projs);
+  }
+  return projs;
 }
 
 function saveProjects(projs) {

@@ -60,12 +60,15 @@ function saveMessages(msgs) {
 function getProjects() {
   const stored = localStorage.getItem('admin_projects');
   let projs = stored ? JSON.parse(stored) : DEFAULT_PROJECTS;
-  if (!projs.some(p => p.id === 7 || (p.demo && p.demo.includes('restaurant-website')))) {
-    projs.push(DEFAULT_PROJECTS[6]);
-    saveProjects(projs);
-  }
-  if (!projs.some(p => p.id === 8 || (p.demo && p.demo.includes('anime-website')))) {
-    projs.push(DEFAULT_PROJECTS[7]);
+  let updated = false;
+  DEFAULT_PROJECTS.forEach(dp => {
+    const exists = projs.some(p => p.id === dp.id || (p.demo && p.demo.toLowerCase() === dp.demo.toLowerCase()));
+    if (!exists) {
+      projs.push(dp);
+      updated = true;
+    }
+  });
+  if (updated || !stored) {
     saveProjects(projs);
   }
   return projs;

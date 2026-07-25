@@ -34,15 +34,13 @@ function initProjectsDynamic() {
     return p;
   });
 
-  // Ensure Savoria Kitchen is included in projs
-  if (!projs.some(p => p.id === 7 || (p.demo && p.demo.includes('restaurant-website')))) {
-    projs.push(DEFAULT_PROJECTS[6]);
-  }
-
-  // Ensure Chrono Anime Hub is included in projs
-  if (!projs.some(p => p.id === 8 || (p.demo && p.demo.includes('anime-website')))) {
-    projs.push(DEFAULT_PROJECTS[7]);
-  }
+  // Ensure all default projects (including Savoria Kitchen & Chrono Anime Hub) exist in projs
+  DEFAULT_PROJECTS.forEach(dp => {
+    const exists = projs.some(p => p.id === dp.id || (p.demo && p.demo.toLowerCase() === dp.demo.toLowerCase()));
+    if (!exists) {
+      projs.push(dp);
+    }
+  });
 
   localStorage.setItem('admin_projects', JSON.stringify(projs));
 

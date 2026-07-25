@@ -12,7 +12,7 @@ const DEFAULT_PROJECTS = [
   { id: 5, title: 'Swadeshi Kitchen', demo: 'https://amansharma85-dev.github.io/swadeshi-kitchen-live/', github: 'https://github.com/amansharma85-dev/swadeshi-kitchen-live', badges: ['React', 'CSS3', 'GitHub Pages'], image: 'assets/ss1.png?v=3', description: 'A premium recipe platform featuring traditional Indian recipes, interactive cooking guides, food categories, and responsive UI.' },
   { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png?v=3', description: 'A premium gym landing page highlighting workouts, trainer profiles, plans, and fitness trackers with modern aesthetics.' },
   { id: 7, title: 'Savoria Kitchen', demo: 'https://amansharma85-dev.github.io/restaurant-website/', github: 'https://github.com/amansharma85-dev/restaurant-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/restaurant.png', description: 'A premium gourmet food delivery and restaurant web application featuring interactive food categories, search, cart, meal bundles, and dark/light roast themes.' },
-  { id: 8, title: 'Chrono Anime Hub', demo: 'https://Amansharma85-DEV.github.io/anime-website/', github: 'https://github.com/Amansharma85-DEV/anime-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/anime.png', description: 'An ultra-modern anime magazine & character hub featuring interactive character switchers, manga stories, trailer modals, wallpaper galleries, and dark/light themes.' }
+  { id: 8, title: 'Chrono Anime Hub', demo: 'https://Amansharma85-DEV.github.io/anime-website/', github: 'https://github.com/Amansharma85-DEV/anime-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/anime.png?v=3', description: 'An ultra-modern anime magazine & character hub featuring interactive character switchers, manga stories, trailer modals, wallpaper galleries, and dark/light themes.' }
 ];
 
 function initProjectsDynamic() {
@@ -30,6 +30,9 @@ function initProjectsDynamic() {
     }
     if (p.id === 6 || p.title === 'Elite Fitness Club') {
       return { ...p, image: 'assets/ss2.png?v=3' };
+    }
+    if (p.id === 8 || p.title === 'Chrono Anime Hub') {
+      return { ...p, image: 'assets/anime.png?v=3' };
     }
     return p;
   });

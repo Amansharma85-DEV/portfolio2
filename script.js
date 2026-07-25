@@ -9,15 +9,21 @@ const DEFAULT_PROJECTS = [
   { id: 2, title: 'Clinic Website', demo: 'https://amansharma85-dev.github.io/clinic/', github: 'https://github.com/amansharma85-dev/clinic', badges: ['React', 'Vite', 'Tailwind'], image: 'assets/project2.png', description: 'Professional medical clinic interface with appointment booking, doctor profiles, services showcase, and clean healthcare UI.' },
   { id: 3, title: 'E-Commerce React App', demo: 'https://amansharma85-dev.github.io/ecommerce/#/', github: 'https://github.com/amansharma85-dev/ecommerce', badges: ['React', 'Node.js', 'Express'], image: 'assets/project3.png', description: 'React e-commerce shopping platform with product catalog filtering, cart state management, and seamless checkout.' },
   { id: 4, title: 'E-Commerce Website', demo: 'https://amansharma85-dev.github.io/e-commerce-website/', github: 'https://github.com/amansharma85-dev/e-commerce-website', badges: ['JavaScript', 'HTML5', 'CSS3'], image: 'assets/project4.png', description: 'Traditional shopping website with clean product catalog layouts, sliding banner, category filters, and intuitive cart UI.' },
-  { id: 5, title: 'Swadeshi Kitchen', demo: 'https://amansharma85-dev.github.io/swadeshi-kitchen-live/', github: 'https://github.com/amansharma85-dev/swadeshi-kitchen-live', badges: ['React', 'CSS3', 'GitHub Pages'], image: 'assets/ss1.png?v=3', description: 'A premium recipe platform featuring traditional Indian recipes, interactive cooking guides, food categories, and responsive UI.' },
-  { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png?v=3', description: 'A premium gym landing page highlighting workouts, trainer profiles, plans, and fitness trackers with modern aesthetics.' },
-  { id: 7, title: 'Savoria Kitchen', demo: 'https://amansharma85-dev.github.io/restaurant-website/', github: 'https://github.com/amansharma85-dev/restaurant-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/restaurant.png', description: 'A premium gourmet food delivery and restaurant web application featuring interactive food categories, search, cart, meal bundles, and dark/light roast themes.' },
-  { id: 8, title: 'Chrono Anime Hub', demo: 'https://Amansharma85-DEV.github.io/anime-website/', github: 'https://github.com/Amansharma85-DEV/anime-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/anime.png?v=3', description: 'An ultra-modern anime magazine & character hub featuring interactive character switchers, manga stories, trailer modals, wallpaper galleries, and dark/light themes.' }
+  { id: 5, title: 'Swadeshi Kitchen', demo: 'https://amansharma85-dev.github.io/swadeshi-kitchen-live/', github: 'https://github.com/amansharma85-dev/swadeshi-kitchen-live', badges: ['React', 'CSS3', 'GitHub Pages'], image: 'assets/ss1.png?v=10', description: 'A premium recipe platform featuring traditional Indian recipes, interactive cooking guides, food categories, and responsive UI.' },
+  { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png?v=10', description: 'A premium gym landing page highlighting workouts, trainer profiles, plans, and fitness trackers with modern aesthetics.' },
+  { id: 7, title: 'Savoria Kitchen', demo: 'https://amansharma85-dev.github.io/restaurant-website/', github: 'https://github.com/amansharma85-dev/restaurant-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/restaurant.png?v=10', description: 'A premium gourmet food delivery and restaurant web application featuring interactive food categories, search, cart, meal bundles, and dark/light roast themes.' },
+  { id: 8, title: 'Chrono Anime Hub', demo: 'https://Amansharma85-DEV.github.io/anime-website/', github: 'https://github.com/Amansharma85-DEV/anime-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/anime.png?v=10', description: 'An ultra-modern anime magazine & character hub featuring interactive character switchers, manga stories, trailer modals, wallpaper galleries, and dark/light themes.' }
 ];
 
 function initProjectsDynamic() {
   const container = document.querySelector('.projects-grid');
   if (!container) return;
+
+  const DATA_VER = '10';
+  if (localStorage.getItem('admin_projects_ver') !== DATA_VER) {
+    localStorage.setItem('admin_projects', JSON.stringify(DEFAULT_PROJECTS));
+    localStorage.setItem('admin_projects_ver', DATA_VER);
+  }
 
   let projs = localStorage.getItem('admin_projects')
     ? JSON.parse(localStorage.getItem('admin_projects'))
@@ -25,19 +31,22 @@ function initProjectsDynamic() {
 
   // Auto-upgrade image paths to bypass cached localStorage & HTTP cache
   projs = projs.map(p => {
-    if (p.id === 5 || p.title === 'Swadeshi Kitchen') {
-      return { ...p, image: 'assets/ss1.png?v=3' };
+    if (p.id === 8 || (p.title && p.title.toLowerCase().includes('anime')) || (p.demo && p.demo.toLowerCase().includes('anime'))) {
+      return { ...p, title: 'Chrono Anime Hub', image: 'assets/anime.png?v=10' };
     }
-    if (p.id === 6 || p.title === 'Elite Fitness Club') {
-      return { ...p, image: 'assets/ss2.png?v=3' };
+    if (p.id === 5 || (p.title && p.title.toLowerCase().includes('swadeshi'))) {
+      return { ...p, image: 'assets/ss1.png?v=10' };
     }
-    if (p.id === 8 || p.title === 'Chrono Anime Hub') {
-      return { ...p, image: 'assets/anime.png?v=3' };
+    if (p.id === 6 || (p.title && p.title.toLowerCase().includes('fitness')) || (p.title && p.title.toLowerCase().includes('gym'))) {
+      return { ...p, image: 'assets/ss2.png?v=10' };
+    }
+    if (p.id === 7 || (p.title && p.title.toLowerCase().includes('savoria')) || (p.demo && p.demo.toLowerCase().includes('restaurant'))) {
+      return { ...p, image: 'assets/restaurant.png?v=10' };
     }
     return p;
   });
 
-  // Ensure all default projects (including Savoria Kitchen & Chrono Anime Hub) exist in projs
+  // Ensure all default projects exist in projs
   DEFAULT_PROJECTS.forEach(dp => {
     const exists = projs.some(p => p.id === dp.id || (p.demo && p.demo.toLowerCase() === dp.demo.toLowerCase()));
     if (!exists) {

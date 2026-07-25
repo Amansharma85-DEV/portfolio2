@@ -11,7 +11,8 @@ const DEFAULT_PROJECTS = [
   { id: 4, title: 'E-Commerce Website', demo: 'https://amansharma85-dev.github.io/e-commerce-website/', github: 'https://github.com/amansharma85-dev/e-commerce-website', badges: ['JavaScript', 'HTML5', 'CSS3'], image: 'assets/project4.png', description: 'Traditional shopping website with clean product catalog layouts, sliding banner, category filters, and intuitive cart UI.' },
   { id: 5, title: 'Swadeshi Kitchen', demo: 'https://amansharma85-dev.github.io/swadeshi-kitchen-live/', github: 'https://github.com/amansharma85-dev/swadeshi-kitchen-live', badges: ['React', 'CSS3', 'GitHub Pages'], image: 'assets/ss1.png?v=3', description: 'A premium recipe platform featuring traditional Indian recipes, interactive cooking guides, food categories, and responsive UI.' },
   { id: 6, title: 'Elite Fitness Club', demo: 'https://amansharma85-dev.github.io/gym/', github: 'https://github.com/amansharma85-dev/gym', badges: ['Next.js', 'React', 'Tailwind'], image: 'assets/ss2.png?v=3', description: 'A premium gym landing page highlighting workouts, trainer profiles, plans, and fitness trackers with modern aesthetics.' },
-  { id: 7, title: 'Savoria Kitchen', demo: 'https://amansharma85-dev.github.io/restaurant-website/', github: 'https://github.com/amansharma85-dev/restaurant-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/restaurant.png', description: 'A premium gourmet food delivery and restaurant web application featuring interactive food categories, search, cart, meal bundles, and dark/light roast themes.' }
+  { id: 7, title: 'Savoria Kitchen', demo: 'https://amansharma85-dev.github.io/restaurant-website/', github: 'https://github.com/amansharma85-dev/restaurant-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/restaurant.png', description: 'A premium gourmet food delivery and restaurant web application featuring interactive food categories, search, cart, meal bundles, and dark/light roast themes.' },
+  { id: 8, title: 'Chrono Anime Hub', demo: 'https://Amansharma85-DEV.github.io/anime-website/', github: 'https://github.com/Amansharma85-DEV/anime-website', badges: ['JavaScript', 'HTML5', 'CSS3', 'GitHub Pages'], image: 'assets/anime.png', description: 'An ultra-modern anime magazine & character hub featuring interactive character switchers, manga stories, trailer modals, wallpaper galleries, and dark/light themes.' }
 ];
 
 function initProjectsDynamic() {
@@ -34,8 +35,13 @@ function initProjectsDynamic() {
   });
 
   // Ensure Savoria Kitchen is included in projs
-  if (!projs.some(p => p.id === 7 || p.demo.includes('restaurant-website'))) {
+  if (!projs.some(p => p.id === 7 || (p.demo && p.demo.includes('restaurant-website')))) {
     projs.push(DEFAULT_PROJECTS[6]);
+  }
+
+  // Ensure Chrono Anime Hub is included in projs
+  if (!projs.some(p => p.id === 8 || (p.demo && p.demo.includes('anime-website')))) {
+    projs.push(DEFAULT_PROJECTS[7]);
   }
 
   localStorage.setItem('admin_projects', JSON.stringify(projs));
